@@ -6,6 +6,8 @@ import { Walls } from "./Walls";
 import { Geometry } from "three-stdlib";
 import * as THREE from "three";
 import "./index.css";
+import { useClampAngularVelocity } from "./useClampAngularVelocity";
+import RiceDwarfVirus from "./Rice_dwarf_100_draco";
 
 function App() {
   return (
@@ -17,8 +19,7 @@ function App() {
           <OrbitControls />
           <ambientLight />
           <directionalLight />
-
-          {[...Array(50)].map((_, idx) => (
+          {[...Array(30)].map((_, idx) => (
             <Thing key={idx} />
           ))}
         </Physics>
@@ -35,16 +36,19 @@ function Thing() {
     []
   );
 
-  const [ref] = useConvexPolyhedron(() => ({
+  const [ref, api] = useConvexPolyhedron(() => ({
     // TODO: accurate mass data from PDB --> need to multiply by number of residues or something else? doesn't seem right
     mass: 1,
     args: geo,
   }));
 
+  useClampAngularVelocity({ api });
+
   return (
     <mesh ref={ref}>
       <icosahedronBufferGeometry args={[1, 0]} />
       <meshStandardMaterial metalness={0.5} roughness={0.5} color={"tomato"} />
+      <RiceDwarfVirus scale={[0.0025, 0.0025, 0.0025]} />
     </mesh>
   );
 }
