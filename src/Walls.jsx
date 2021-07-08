@@ -15,7 +15,7 @@ export function Walls() {
     {
       rotation: [0, -1 * Math.PI, 0],
       position: [0, -0, worldRadius],
-      reflect: true,
+      reflect,
     },
     // {/* left */}
     {
@@ -39,7 +39,7 @@ export function Walls() {
     {
       rotation: [0.5 * Math.PI, 0, 0],
       position: [0, worldRadius, 0],
-      // reflect,
+      reflect,
     },
   ];
 
