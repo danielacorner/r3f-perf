@@ -5,6 +5,7 @@ import { Suspense, useMemo } from "react";
 import { Walls } from "./Walls";
 import { Geometry } from "three-stdlib";
 import * as THREE from "three";
+import "./index.css";
 
 function App() {
   return (
@@ -34,7 +35,7 @@ function Thing() {
     []
   );
 
-  const [ref, api] = useConvexPolyhedron(() => ({
+  const [ref] = useConvexPolyhedron(() => ({
     // TODO: accurate mass data from PDB --> need to multiply by number of residues or something else? doesn't seem right
     mass: 1,
     args: geo,
