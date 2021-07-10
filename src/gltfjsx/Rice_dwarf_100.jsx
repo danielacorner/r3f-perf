@@ -125,5 +125,3 @@ export default function Model(props) {
     </group>
   );
 }
-
-useGLTF.preload("/models/Rice_dwarf_100_draco.glb");

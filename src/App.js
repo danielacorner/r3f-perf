@@ -1,5 +1,5 @@
 import { Physics, useConvexPolyhedron } from "@react-three/cannon";
-import { OrbitControls, Stats } from "@react-three/drei";
+import { OrbitControls, Stats, useProgress } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useMemo } from "react";
 import { Walls } from "./Walls";
@@ -7,30 +7,43 @@ import { Geometry } from "three-stdlib";
 import * as THREE from "three";
 import "./index.css";
 import { useClampAngularVelocity } from "./useClampAngularVelocity";
-import RiceDwarfVirus from "./Rice_dwarf_100_draco";
+import RiceDwarfVirus from "./gltfjsx/Rice_dwarf_100";
+import DengueVirus from "./gltfjsx/Denguevirus_50";
+import Bacteriophage from "./gltfjsx/Bacteriophage_P68_120";
+import Faustovirus from "./gltfjsx/Faust_1200_1";
+import { LoadingIndicator } from "./LoadingIndicator";
 
 function App() {
+  const { active } = useProgress();
   return (
     <Suspense fallback={null}>
-      <Canvas style={{ height: window.innerHeight, width: window.innerWidth }}>
-        <Stats />
-        <Physics gravity={[0, 0, 0]}>
-          <Walls />
-          <OrbitControls />
-          <ambientLight />
-          <directionalLight />
-          {[...Array(30)].map((_, idx) => (
-            <Thing key={idx} />
-          ))}
-        </Physics>
-      </Canvas>
+      {active ? (
+        <LoadingIndicator />
+      ) : (
+        <Canvas
+          style={{ height: window.innerHeight, width: window.innerWidth }}
+        >
+          <Stats />
+          <Physics gravity={[0, 0, 0]}>
+            <Walls />
+            <OrbitControls />
+            <ambientLight />
+            <directionalLight />
+            {[RiceDwarfVirus, DengueVirus, Bacteriophage, Faustovirus].map(
+              (Component, idx) => (
+                <Thing key={idx} {...{ Component }} />
+              )
+            )}
+          </Physics>
+        </Canvas>
+      )}
     </Suspense>
   );
 }
 
 export default App;
 
-function Thing() {
+function Thing({ Component }) {
   const geo = useMemo(
     () => toConvexProps(new THREE.IcosahedronBufferGeometry(1, 0)),
     []
@@ -46,9 +59,7 @@ function Thing() {
 
   return (
     <mesh ref={ref}>
-      <icosahedronBufferGeometry args={[1, 0]} />
-      <meshStandardMaterial metalness={0.5} roughness={0.5} color={"tomato"} />
-      <RiceDwarfVirus scale={[0.0025, 0.0025, 0.0025]} />
+      <Component scale={[0.0025, 0.0025, 0.0025]} />
     </mesh>
   );
 }
